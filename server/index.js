@@ -15,9 +15,14 @@ app.use(bodyParser.json());
 
 const loginRoutes = require('./routes/auth/login');
 const registerRoutes = require('./routes/auth/register');
+
 const adminRoutes = require('./routes/admin/collegesetup');
 const userRoutes = require('./routes/user/user')
 
+
+
+const collegeRoutes = require('./routes/colleges/college');
+// const recruiterRoutes = require('./routes/recruiter');
 
 
 
@@ -43,8 +48,12 @@ app.use((err, req, res, next) => {
   });
 app.use('/api/login', loginRoutes);
 app.use('/api/register', registerRoutes);
+
 app.use('/api/', adminRoutes);
 app.use('/api/',userRoutes);
+
+// app.use('/api/recruiter', recruiterRoutes);
+app.use('/api/colleges', collegeRoutes);
 
   
   app.listen(PORT, () => {
