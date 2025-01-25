@@ -1,3 +1,4 @@
+const mongoose = require('mongoose');
 const studentProfileSchema = new mongoose.Schema({
     user: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
     resume: { type: String }, // URL or file path for resume
