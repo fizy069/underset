@@ -1,6 +1,8 @@
 'use client';
 import React, { useState } from 'react';
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
+import { toast, Toaster } from 'sonner';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -26,6 +28,7 @@ export default function SignupPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const router = useRouter();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -45,7 +48,12 @@ export default function SignupPage() {
   const handleSignup = async (e: React.FormEvent) => {
     e.preventDefault();
     if (formData.password !== formData.confirmPassword) {
-      alert("Passwords do not match");
+      toast.error('Passwords do not match');
+      return;
+    }
+
+    if (!formData.role) {
+      toast.error('Please select a role');
       return;
     }
 
@@ -65,21 +73,23 @@ export default function SignupPage() {
       });
 
       if (!response.ok) {
-        throw new Error('Registration failed');
+        const errorData = await response.json();
+        throw new Error(errorData.message || 'Registration failed');
       }
 
-      const data = await response.json();
-      console.log('Registration successful:', data);
-      alert('Registration successful!');
+      toast.success('Registration successful!');
+      router.push('/login');
     } catch (error) {
-      console.error('Error during registration:', error);
-      alert('Registration failed. Please try again.');
+      toast.error(error instanceof Error ? error.message : 'Registration failed');
     } finally {
       setIsLoading(false);
     }
   };
 
+
   return (
+    <>
+    <Toaster richColors />
     <div className="grid grid-cols-1 md:grid-cols-2 min-h-screen">
       <div className="hidden md:block relative">
         <Image 
@@ -202,5 +212,6 @@ export default function SignupPage() {
         </div>
       </div>
     </div>
+    </>
   );
 }

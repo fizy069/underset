@@ -1,17 +1,26 @@
 'use client';
 import React, { useState } from 'react';
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
+import { toast, Toaster } from 'sonner';
+import { jwtDecode } from 'jwt-decode';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import Link from 'next/link';
-import { Eye,EyeOff,Loader2 } from 'lucide-react';
+import { Eye, EyeOff, Loader2 } from 'lucide-react';
+
+interface JwtPayload {
+  userId: string;
+  role: 'student' | 'admin' | 'recruiter';
+}
 
 export default function LoginPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const router = useRouter();
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -27,23 +36,41 @@ export default function LoginPage() {
       });
 
       if (!response.ok) {
-        throw new Error('Login failed');
+        const errorData = await response.json();
+        throw new Error(errorData.message || 'Login failed');
       }
 
-      const data = await response.json();
-      console.log('Login successful:', data);
-      alert('Login successful!');
+      const { token } = await response.json();
+      localStorage.setItem('token', token);
+
+      const decoded = jwtDecode<JwtPayload>(token);
+      
+      toast.success('Login successful!');
+
+      switch (decoded.role) {
+        case 'student':
+          router.push('/student/dashboard');
+          break;
+        case 'admin':
+          router.push('/admin/dashboard');
+          break;
+        case 'recruiter':
+          router.push('/recruiter/dashboard');
+          break;
+        default:
+          router.push('/');
+      }
     } catch (error) {
-      console.error('Error during login:', error);
-      alert('Login failed. Please check your credentials and try again.');
+      toast.error(error instanceof Error ? error.message : 'Login failed');
     } finally {
       setIsLoading(false);
     }
   };
 
   return (
+    <>
+    <Toaster richColors />
     <div className="grid grid-cols-1 md:grid-cols-2 min-h-screen">
-      {/* Left side - Image */}
       <div className="hidden md:block relative">
         <Image 
           src="/login.jpg" 
@@ -103,7 +130,7 @@ export default function LoginPage() {
             >
               {isLoading ? (
                 <><Loader2 className="mr-2 h-4 w-4 animate-spin" /> Logging In...</>
-              ) : (
+                ) : (
                 "Login"
               )}
             </Button>
@@ -116,5 +143,6 @@ export default function LoginPage() {
         </div>
       </div>
     </div>
+    </>
   );
 }
