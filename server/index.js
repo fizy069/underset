@@ -13,10 +13,8 @@ const PORT = process.env.PORT || 5000;
 app.use(cors());
 app.use(bodyParser.json());
 
-const authRoutes = require('./routes/auth');
-const adminRoutes = require('./routes/admin');
-const recruiterRoutes = require('./routes/recruiter');
-const studentRoutes = require('./routes/student');
+const loginRoutes = require('./routes/auth/login');
+const registerRoutes = require('./routes/auth/register');
 
 
 
@@ -41,10 +39,8 @@ app.use((err, req, res, next) => {
       error: process.env.NODE_ENV === 'development' ? err.message : {}
     });
   });
-app.use('/api/auth', authRoutes);
-app.use('/api/admin', adminRoutes); 
-app.use('/api/recruiter', recruiterRoutes); 
-app.use('/api/student', studentRoutes); 
+app.use('/api/login', loginRoutes);
+app.use('/api/register', registerRoutes);
 
   
   app.listen(PORT, () => {
