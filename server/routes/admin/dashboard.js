@@ -1,12 +1,7 @@
 const express = require('express');
 const router = express.Router();
-const College = require('../models/College');  
-const Requirement = require('../models/Requirement');  
-const Student = require('../models/Student');
-const Recruiter = require('../models/Recruiter');
-const Placement = require('../models/Placement');
 const authMiddleware = require('../middleware/auth');
-const User = require('../models/User')
+const User = require('../../models/user')
 
 
 
