@@ -17,6 +17,7 @@ const loginRoutes = require('./routes/auth/login');
 const registerRoutes = require('./routes/auth/register');
 
 const adminRoutes = require('./routes/admin/collegesetup');
+const adminDasboard = require('./routes/admin/dashboard');
 const userRoutes = require('./routes/user/user')
 
 
@@ -54,6 +55,7 @@ app.use('/api/',userRoutes);
 
 // app.use('/api/recruiter', recruiterRoutes);
 app.use('/api/colleges', collegeRoutes);
+app.use('/api/admin', adminDasboard)
 
   
   app.listen(PORT, () => {
