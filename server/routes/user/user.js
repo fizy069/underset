@@ -1,9 +1,9 @@
 const express = require('express');
 const router = express.Router();
-const User = require('../models/User');
+const User = require('../../models/user');
 
 // Middleware to authenticate (optional, if you want to restrict access)
-const authMiddleware = require('../middlewares/auth');
+const authMiddleware = require('../../middleware/auth');
 
 // Get user details by ID
 router.get('/user/:id', authMiddleware(['admin', 'recruiter', 'student']), async (req, res) => {
