@@ -1,14 +1,13 @@
 const express = require('express');
 const router = express.Router();
-const College = require('../models/College');  // Assuming a College model is created
+const College = require('../../models/college');  // Assuming a College model is created
 const Requirement = require('../models/Requirement');  // Assuming a Requirement model is created
 const Student = require('../models/Student');
 const Recruiter = require('../models/Recruiter');
 const Placement = require('../models/Placement');
-const authMiddleware = require('../middleware/auth');
-const User = require('../models/User')
+const authMiddleware = require('../../middleware/auth');
+const User = require('../../models/user')
 
-// College Setup API
 router.post('/college-setup', authMiddleware(['admin']), async (req, res) => {
     const { collegeName, logo, brandingColors, placementPolicies, requirements } = req.body;
   
