@@ -7,7 +7,7 @@ const company = require('../../models/company');
 const router = express.Router();
 
 router.post('/', async (req, res) => {
-  const { name, email, password, role } = req.body;
+  const { name, email, password, role, college, company} = req.body;
 
   try {
     let user = await User.findOne({ email });
