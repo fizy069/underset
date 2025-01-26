@@ -2,6 +2,8 @@ const express = require('express');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const User = require('../../models/User');
+const college = require('../../models/college');
+const company = require('../../models/company');
 const router = express.Router();
 
 router.post('/', async (req, res) => {
@@ -17,6 +19,8 @@ router.post('/', async (req, res) => {
       name,
       email,
       password,
+      college,
+      company,
       role
     });
 
